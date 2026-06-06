@@ -1,5 +1,8 @@
-# 모듈들은 Week 4부터 추가됨
-# 이번 주는 backend 동작 검증용 더미만
+module "ecr" {
+  source = "../../modules/ecr"
 
-# 검증용 더미 리소스 — Day 2에 지울 거
-# (없어도 됨, init 검증은 빈 main.tf로도 가능)
+  name                   = var.project_name
+  image_tag_mutability   = "MUTABLE"
+  scan_on_push           = true
+  lifecycle_policy_count = 10
+}
