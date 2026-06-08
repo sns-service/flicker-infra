@@ -25,3 +25,16 @@ module "iam_ec2" {
   role_name     = "${var.project_name}-ec2-role"
   s3_bucket_arn = module.s3_images.bucket_arn   # 의존성 입력
 }
+
+module "network" {
+  source = "../../modules/network"
+
+  project_name = var.project_name
+  vpc_cidr     = "10.0.0.0/16"
+  azs          = ["ap-northeast-2a", "ap-northeast-2c"]
+
+  public_subnet_cidrs  = ["10.0.1.0/24", "10.0.2.0/24"]
+  private_subnet_cidrs = ["10.0.11.0/24", "10.0.12.0/24"]
+
+  single_nat_gateway = true
+}
