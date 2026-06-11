@@ -38,3 +38,36 @@ module "network" {
 
   single_nat_gateway = true
 }
+
+module "alb" {
+  source = "../../modules/alb"
+
+  project_name      = var.project_name
+  vpc_id            = module.network.vpc_id
+  public_subnet_ids = module.network.public_subnet_ids
+  security_group_id = module.network.alb_security_group_id
+}
+
+module "rds" {
+  source = "../../modules/rds"
+
+  project_name      = var.project_name
+  vpc_id            = module.network.vpc_id
+  subnet_ids        = module.network.private_subnet_ids
+  security_group_id = module.network.db_security_group_id
+
+  db_name     = "sns"
+  db_username = var.db_username
+  db_password = var.db_password
+  instance_class = "db.t3.micro"
+  multi_az    = false  # 학습용. 운영은 true
+}
+
+module "elasticache" {
+  source = "../../modules/elasticache"
+
+  project_name      = var.project_name
+  subnet_ids        = module.network.private_subnet_ids
+  security_group_id = module.network.redis_security_group_id
+  node_type         = "cache.t3.micro"
+}

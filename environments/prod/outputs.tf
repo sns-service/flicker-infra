@@ -27,3 +27,16 @@ output "private_subnet_ids" {
   description = "Private subnet IDs"
   value       = module.network.private_subnet_ids
 }
+
+output "alb_dns_name" {
+  value = module.alb.alb_dns_name
+}
+
+output "rds_endpoint" {
+  value     = module.rds.db_instance_address
+  sensitive = true
+}
+
+output "redis_endpoint" {
+  value = module.elasticache.redis_endpoint
+}
